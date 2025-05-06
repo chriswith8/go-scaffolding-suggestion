@@ -8,6 +8,8 @@ import (
 type (
 	Repository interface {
 		Create(fruit entity.Fruit) error
+		Save(e entity.Fruit) error
+		FindByID(id string) (*entity.Fruit, error)
 	}
 	repository struct {
 		sqlAdapter sql.Adapter[entity.Fruit]

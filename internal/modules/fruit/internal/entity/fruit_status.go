@@ -3,6 +3,7 @@ package entity
 import (
 	"database/sql/driver"
 
+	"github.com/chriswith8/go-scaffolding-suggestion/internal/utils/constants"
 	"github.com/chriswith8/go-scaffolding-suggestion/pkg/common"
 )
 
@@ -13,12 +14,16 @@ const (
 	Ripe
 	Unripe
 	Rotten
+	Destroyed
 )
 
 var fruitStatusMap = map[string]FruitStatus{
-	"Ripe":   Ripe,
-	"Unripe": Unripe,
-	"Rotten": Rotten,
+	"Ripe":                    Ripe,
+	"Unripe":                  Unripe,
+	"Rotten":                  Rotten,
+	"Destroyed":               Destroyed,
+	constants.UndefinedStatus: Undefined,
+	constants.Blank:           Undefined,
 }
 
 func ToFruitStatus(s string) (FruitStatus, error) {
@@ -49,7 +54,9 @@ func (e FruitStatus) String() string {
 		return "Unripe"
 	case Rotten:
 		return "Rotten"
+	case Destroyed:
+		return "Destroyed"
 	default:
-		return "Undefined"
+		return constants.UndefinedStatus
 	}
 }

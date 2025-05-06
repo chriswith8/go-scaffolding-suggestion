@@ -10,17 +10,19 @@ import (
 func (h FruitHandler) CreateFruit(w http.ResponseWriter, r *http.Request) {
 	var payload data.NewFruitInput
 
+	w.Header().Set("Content-Type", "application/json")
+
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	if err := h.validator.Struct(payload); err != nil {
+	if err := h.validator.StructCtx(r.Context(), payload); err != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		return
 	}
 
-	fruit, err := h.fruit.CreateFruit.Exec(payload)
+	fruit, err := h.uc.CreateFruit.Exec(payload)
 	if err != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		return

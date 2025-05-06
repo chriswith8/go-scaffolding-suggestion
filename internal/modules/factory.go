@@ -6,7 +6,7 @@ import (
 )
 
 type Modules struct {
-	Fruit *fruit.Fruit
+	Fruit *fruit.Module
 }
 
 func NewModules(dbConn *gorm.DB) *Modules {
@@ -18,6 +18,6 @@ func NewModules(dbConn *gorm.DB) *Modules {
 	}()
 
 	return &Modules{
-		Fruit: fruit.NewFruit(dbConn),
+		Fruit: fruit.NewModule(dbConn),
 	}
 }

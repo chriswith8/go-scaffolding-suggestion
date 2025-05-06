@@ -1,9 +1,14 @@
 package entity
 
-import "gorm.io/gorm"
+import (
+	"errors"
+	"math/rand"
+
+	"github.com/google/uuid"
+)
 
 type Fruit struct {
-	gorm.Model
+	ID     string      `json:"id" gorm:"primarykey"`
 	Name   string      `json:"name"`
 	Color  string      `json:"color"`
 	Status FruitStatus `json:"status"`
@@ -11,6 +16,7 @@ type Fruit struct {
 
 func NewFruit(name string, color string) *Fruit {
 	return &Fruit{
+		ID:     uuid.New().String(),
 		Name:   name,
 		Color:  color,
 		Status: Unripe,
@@ -21,10 +27,26 @@ func (f *Fruit) Ripe() {
 	f.Status = Ripe
 }
 
-func (f *Fruit) Rot() {
+func (f *Fruit) Rot() error {
+	if f.IsRotten() {
+		return errors.New("fruit is already rotten")
+	}
+
+	if rand.Intn(2) == 0 {
+		return errors.New("fruit cannot be rotten")
+	}
 	f.Status = Rotten
+	return nil
 }
 
 func (f *Fruit) Resurrect() {
 	f.Status = Unripe
+}
+
+func (f *Fruit) Destroy() {
+	f.Status = Destroyed
+}
+
+func (f *Fruit) IsRotten() bool {
+	return f.Status == Rotten
 }
